@@ -1,3 +1,4 @@
+ HEAD
 # Event-Management-System
 A simple event management system build using MERN that has CRUD and Login
 
@@ -28,3 +29,6 @@ Follow these steps to deploy the application in your machine.
 5.	Now your application runs in http://localhost:3000/ URL.
 
 ![demo gif](demo/screencapture-localhost-3000-home-2020-06-14-01_04_43.png)
+=======
+# club-event-manager
+ a75ef83aa5ec1a01733082336db0e298757fc99e
