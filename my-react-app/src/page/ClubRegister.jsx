@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';  
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setClub } from '../redux/slices/clubslice'; // Import the action to
 
 export const ClubRegister = () => {
   const navigate = useNavigate(); // ✅ Must be inside the component
@@ -8,6 +10,7 @@ export const ClubRegister = () => {
   const [clubName, setClubName] = useState('');   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');   
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,6 +20,8 @@ export const ClubRegister = () => {
         email,
         password,
       });
+      dispatch(setClub(response.data.club)); // Dispatch the action to set club data
+      localStorage.setItem('token', response.data.token); // Store user data in
       console.log(response.data);
       navigate('/club-home'); // ✅ Navigate to club dashboard
     } catch (error) {

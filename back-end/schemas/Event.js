@@ -14,14 +14,16 @@ const userschema=new Schema({
 })
 
 const eventSchema = new Schema({
-    clubId: { type: mongoose.Schema.Types.ObjectId, ref: 'Club', required: true },
+    clubId: { type: String, required: true },
     name: { type: String, required: true},
     description: { type: String, required: true},
     date: { type: String, required: true },
     time: { type: String, required: true},
     venue: { type: String, required: true},
     completed: { type: Boolean, default: false },
-    users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }]
+    user:[
+        userschema
+    ]
     
 }
 ,

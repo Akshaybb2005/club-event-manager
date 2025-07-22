@@ -51,7 +51,10 @@ const login=async(req,res)=>{
 const getallevents=async(req,res)=>{
     const { clubId } = req.body;
     try {
-        const events = await Event.findOne({ clubId });
+        console.log('Fetching events for clubId:', clubId);
+        const events = await Event.find({ clubId });
+        console.log('Events found:', events);
+        
         res.status(200).json(events);
     } catch (error) {
         console.error(error);
@@ -67,6 +70,8 @@ const logout=async(req,res)=>{
         res.status(500).json({ message: "Internal server error" });
     }
 }
+
+
 module.exports = {
     register,
     login,
