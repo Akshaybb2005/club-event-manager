@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom"; 
+import { useDispatch,useSelector } from 'react-redux';
+
 
 const EventsDashboard = () => {
   const [activeTab, setActiveTab] = useState('upcoming');
+  const [events, setEvents] = useState([]);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user); // Get user data from
 
   const [filterCategory, setFilterCategory] = useState('all');
 
@@ -123,6 +130,19 @@ const EventsDashboard = () => {
       default: return 'text-gray-600 bg-gray-100';
     }
   };
+
+  const getallevents = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/user/events');
+      console.log('All Events:', response.data);
+      setEvents(response.data);
+    } catch (error) {
+      console.log('Error fetching events:', error);
+    }
+  }
+  useEffect(() => {
+    getallevents(); 
+  }, []);
 
   const EventCard = ({ event, isUpcoming = true }) => (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
@@ -249,11 +269,11 @@ const EventsDashboard = () => {
         {/* Events Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {activeTab === 'upcoming' 
-            ? filterEvents(upcomingEvents, true).map(event => (
-                <EventCard key={event.id} event={event} isUpcoming={true} />
+            ? filterEvents(events, true).map(event => (
+                <EventCard key={event._id} event={event} isUpcoming={true} />
               ))
-            : filterEvents(registeredEvents, false).map(event => (
-                <EventCard key={event.id} event={event} isUpcoming={false} />
+            : filterEvents(events, false).map(event => (
+                <EventCard key={event._id} event={event} isUpcoming={false} />
               ))
           }
         </div>

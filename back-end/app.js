@@ -3,6 +3,7 @@ const fis=require('fs');
 const path=require('path');
 const Parsbdy = require('body-parser');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 const eventRoutes = require('./routings/EventRoutes');
 const userRoutes = require('./routings/UserRoutes');
@@ -21,6 +22,7 @@ const mongouri = process.env.ATLAS_URI;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 mongoose
   .connect(mongouri, {

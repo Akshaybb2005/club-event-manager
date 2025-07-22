@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setClub } from '../redux/slices/clubslice'; // Import the action to set club data
+import { useNavigate } from 'react-router-dom';
 const mockEvents = [
   {
     id: 1,
@@ -34,14 +38,36 @@ export default function ClubHome() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { club } = useSelector((state) => state.club); // Access club data from Redux store
+const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    // Simulate fetch delay
-    setTimeout(() => {
-      setEvents(mockEvents);
+  const getallevents = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/club/getAllEvents', { clubId: club._id });
+      console.log('club : ',club);
+      
+      console.log('Club ID:', club._id);
+        console.log('Fetched events:', response.data[0]);
+        
+      setEvents(response.data);
       setLoading(false);
-    }, 1000);
-  }, []);
+    } catch (error) {
+      setError('Failed to fetch events');
+    }
+  }
+  useEffect(() => {
+    getallevents();
+  }, [club.id]);
+
+    
+  // useEffect(() => {
+  //   // Simulate fetch delay
+  //   setTimeout(() => {
+  //     setEvents(mockEvents);
+  //     setLoading(false);
+  //   }, 1000);
+  // }, []);
 
   const formatDate = (d) =>
     new Date(d).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
@@ -84,7 +110,7 @@ export default function ClubHome() {
       <main className="max-w-3xl mx-auto space-y-8">
         {/* Create New Event */}
         <div
-          onClick={() => alert('Create New Event clicked')}
+          onClick={() => navigate('/new-event')}
           className="w-full bg-white p-5 rounded-xl border-2 border-dashed border-blue-300 hover:border-blue-500 flex items-center gap-4 transition transform hover:-translate-y-1 cursor-pointer"
         >
           <div className="w-10 h-10 bg-blue-100 rounded flex items-center justify-center hover:bg-blue-600 transition-colors">
@@ -111,16 +137,16 @@ export default function ClubHome() {
             <p className="text-center text-gray-600 font-medium">No events found. Create your first event!</p>
           ) : (
             <div className="space-y-4">
-              {events.map(({ id, title, description, date, time, location, status }) => (
+              {events.map(({ _id, name, description, date, time, venue, status }) => (
                 <div
-                  key={id}
+                  key={_id}
                   className="w-full bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition transform hover:-translate-y-1 cursor-pointer"
-                  onClick={() => alert(`Edit event ${id} clicked`)}
+                  onClick={() => alert(`Edit event ${_id} clicked`)}
                 >
                   <div className="flex justify-between items-start">
                     <div>
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold text-gray-900 hover:text-blue-600 transition">{title}</h3>
+                        <h3 className="text-xl font-bold text-gray-900 hover:text-blue-600 transition">{name}</h3>
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-medium ${
                             status === 'upcoming' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
@@ -186,7 +212,7 @@ export default function ClubHome() {
                               d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                             />
                           </svg>
-                          {location}
+                          {venue}
                         </div>
                       </div>
                     </div>

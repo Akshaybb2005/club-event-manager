@@ -1,0 +1,17 @@
+import {createSlice} from '@reduxjs/toolkit'
+
+const initialState = {
+    club: {},
+  };
+  
+export const clubSlice=createSlice({
+    name:'club',
+    initialState,
+    reducers:{
+        setClub:(state,action)=>{
+            state.club=action.payload;
+        }
+    }
+})
+
+export const {setClub}=clubSlice.actions;

@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';  
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { setUser } from '../redux/slices/userslice'; // Import the action to
+import { setClub } from '../redux/slices/clubslice'; // Import the action to set club data
 
-
-export const Login = () => {
+export const ClubLogin = () => {
   const navigate = useNavigate(); // ✅ Moved inside the component
   const dispatch = useDispatch();
-
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,11 +14,11 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/user/login', { email, password });
+      const response = await axios.post('http://localhost:5000/club/login', { email, password });
       console.log(response.data);
-      dispatch(setUser(response.data.user)); // Dispatch the action to set user data
+      dispatch(setClub(response.data.user)); // Dispatch the action to set club data
       localStorage.setItem('token', response.data.token); // Store user data in
-      navigate('/events-dashboard'); // ✅ Navigate to user dashboard
+      navigate('/club-home');
     } catch (error) {
       console.error('Login failed:', error.response || error);
     }
@@ -30,7 +28,7 @@ export const Login = () => {
     <div className="min-h-screen min-w-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 px-4">
       
       <h1 className="text-4xl font-bold text-white mb-10">
-        Login User
+        login Club
       </h1>
 
       <div className="bg-white rounded-2xl shadow-2xl flex w-full max-w-4xl overflow-hidden">
