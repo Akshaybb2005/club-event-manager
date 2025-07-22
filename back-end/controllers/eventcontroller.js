@@ -2,8 +2,9 @@ const Event = require('../schemas/Event');
 const User = require('../schemas/User');
 
 const createEvent = async (req, res) => {
-    const { name, description, date, time, venue} = req.body;
+    const { clubId, name, description, date, time, venue } = req.body;
     console.log('Club :', req.user._id);
+<<<<<<< HEAD
     clubId=String(req.user._id);require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
@@ -22,6 +23,9 @@ const authenticateJWT = (req, res, next) => {
 
 module.exports = {authenticateJWT};
  // Assuming clubId is available in req.user
+=======
+    // clubId=String(req.user._id); // Assuming clubId is available in req.user
+>>>>>>> 7b187e25fc0bb531884606a2bae7fc395dab3588
     // const { clubId } = req.user._id; // Assuming clubId is available in req.user
     try {
         const event = await Event.create({
@@ -33,9 +37,11 @@ module.exports = {authenticateJWT};
             venue,
             User: []
         });
+        console.log('Created Event : ', event);
+        
         res.status(201).json(event);
     } catch (error) {
-        console.error(error);
+        console.error('Error in creating event : ',error);
         res.status(500).json({ message: "Internal server error" });
     }
 }
@@ -86,6 +92,7 @@ const getAllEvents = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 }
+
 
 module.exports = {
     createEvent,
