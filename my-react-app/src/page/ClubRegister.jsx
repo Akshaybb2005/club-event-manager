@@ -15,7 +15,7 @@ export const ClubRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/club-register', {
+      const response = await axios.post('http://localhost:5000/club/register', {
         clubName,
         email,
         password,
