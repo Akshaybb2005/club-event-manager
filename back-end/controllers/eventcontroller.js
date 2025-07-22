@@ -4,7 +4,24 @@ const User = require('../schemas/User');
 const createEvent = async (req, res) => {
     const { name, description, date, time, venue} = req.body;
     console.log('Club :', req.user._id);
-    clubId=String(req.user._id); // Assuming clubId is available in req.user
+    clubId=String(req.user._id);require("dotenv").config();
+const jwt = require("jsonwebtoken");
+
+const authenticateJWT = (req, res, next) => {
+  const accessTokenSecret = 'secret';
+  if (!accessTokenSecret) {
+    return res.sendStatus(401);
+  }
+  const token = req.headers.authorization?.split(' ')[1]||req.token;
+  
+  const verified = jwt.verify(token, accessTokenSecret);
+  console.log("token : " + verified);
+  req.user = verified;
+  next();
+};
+
+module.exports = {authenticateJWT};
+ // Assuming clubId is available in req.user
     // const { clubId } = req.user._id; // Assuming clubId is available in req.user
     try {
         const event = await Event.create({
